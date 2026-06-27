@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ECG Atlas — Interactive Cardiac Learning</title>
+<meta name="description" content="Explore ECG rhythms, cardiac conduction, waveform analysis, and clinical quiz cases in one interactive learning lab." />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="red-black">
+<main>
+  <nav class="site-nav">
+    <div class="brand"><div class="brand-mark">ECG</div><span>ECG Heart Visualizer</span></div>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#analyze">Analyze ECGs</a>
+      <a href="#study">Study rhythms</a>
+      <a href="#quiz">Quiz lab</a>
+      <a href="#workspace">Visualizer</a>
+    </div>
+    <div class="theme-picker theme-dropdown" aria-label="Choose website appearance">
+      <button type="button" id="themeDropdownBtn" class="theme-dropdown-btn" aria-label="Open appearance colour menu" aria-haspopup="listbox" aria-expanded="false">
+        <span id="themeCurrentDot" class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#ef4444;--swatch-b:#000000"></span>
+      </button>
+      <div id="themeMenu" class="theme-menu" role="listbox" aria-label="Appearance colour options">
+        <button type="button" class="theme-option" data-theme-choice="red-black" data-theme-label="Red + Black" title="Red + Black" aria-label="Red and black appearance" role="option" style="--swatch-a:#ef4444;--swatch-b:#000000"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#ef4444;--swatch-b:#000000"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="green-black" data-theme-label="Green + Black" title="Green + Black" aria-label="Green and black appearance" role="option" style="--swatch-a:#22c55e;--swatch-b:#000000"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#22c55e;--swatch-b:#000000"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="blue-black" data-theme-label="Blue + Black" title="Blue + Black" aria-label="Blue and black appearance" role="option" style="--swatch-a:#3b82f6;--swatch-b:#000000"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#3b82f6;--swatch-b:#000000"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="pink-black" data-theme-label="Pink + Black" title="Pink + Black" aria-label="Pink and black appearance" role="option" style="--swatch-a:#ec4899;--swatch-b:#000000"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#ec4899;--swatch-b:#000000"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="purple-black" data-theme-label="Purple + Black" title="Purple + Black" aria-label="Purple and black appearance" role="option" style="--swatch-a:#8b5cf6;--swatch-b:#000000"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#8b5cf6;--swatch-b:#000000"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="orange-black" data-theme-label="Orange + Black" title="Orange + Black" aria-label="Orange and black appearance" role="option" style="--swatch-a:#f97316;--swatch-b:#000000"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#f97316;--swatch-b:#000000"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="red-white" data-theme-label="Red + White" title="Red + White" aria-label="Red and white appearance" role="option" style="--swatch-a:#ef4444;--swatch-b:#ffffff"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#ef4444;--swatch-b:#ffffff"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="green-white" data-theme-label="Green + White" title="Green + White" aria-label="Green and white appearance" role="option" style="--swatch-a:#22c55e;--swatch-b:#ffffff"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#22c55e;--swatch-b:#ffffff"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="blue-white" data-theme-label="Blue + White" title="Blue + White" aria-label="Blue and white appearance" role="option" style="--swatch-a:#3b82f6;--swatch-b:#ffffff"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#3b82f6;--swatch-b:#ffffff"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="pink-white" data-theme-label="Pink + White" title="Pink + White" aria-label="Pink and white appearance" role="option" style="--swatch-a:#ec4899;--swatch-b:#ffffff"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#ec4899;--swatch-b:#ffffff"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="purple-white" data-theme-label="Purple + White" title="Purple + White" aria-label="Purple and white appearance" role="option" style="--swatch-a:#8b5cf6;--swatch-b:#ffffff"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#8b5cf6;--swatch-b:#ffffff"></span></button>
+        <button type="button" class="theme-option" data-theme-choice="orange-white" data-theme-label="Orange + White" title="Orange + White" aria-label="Orange and white appearance" role="option" style="--swatch-a:#f97316;--swatch-b:#ffffff"><span class="theme-swatch-dot" aria-hidden="true" style="--swatch-a:#f97316;--swatch-b:#ffffff"></span></button>
+      </div>
+      <select id="themeSelect" class="theme-select-fallback" aria-label="Choose website appearance" tabindex="-1" aria-hidden="true">
+        <option value="red-black">Red + Black</option>
+        <option value="green-black">Green + Black</option>
+        <option value="blue-black">Blue + Black</option>
+        <option value="pink-black">Pink + Black</option>
+        <option value="purple-black">Purple + Black</option>
+        <option value="orange-black">Orange + Black</option>
+        <option value="red-white">Red + White</option>
+        <option value="green-white">Green + White</option>
+        <option value="blue-white">Blue + White</option>
+        <option value="pink-white">Pink + White</option>
+        <option value="purple-white">Purple + White</option>
+        <option value="orange-white">Orange + White</option>
+      </select>
+    </div>
+  </nav>
+
+  <section id="home" class="home-hero">
+    <div>
+      <div class="hero-kicker">⚡ Interactive ECG + cardiac conduction learning</div>
+      <h1 class="home-title">See the rhythm inside the heart.</h1>
+      <p class="home-copy">Upload an ECG rhythm strip, estimate the closest rhythm pattern, and watch how electrical conduction through the heart creates the ECG waveform. Built for learning rhythm interpretation visually.</p>
+      <div class="hero-actions">
+        <a class="primary-link" href="#analyze">Analyze an ECG →</a>
+        <a class="secondary-link" href="#study">Study rhythms</a>
+        <a class="secondary-link" href="#workspace">Open visualizer</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-card ecg-mini">
+        <div class="mini-title">Live ECG strip</div>
+        <svg class="mini-ecg" viewBox="0 0 600 150">
+          <defs>
+            <linearGradient id="miniGrad" x1="0" x2="1"><stop offset="0%" stop-color="#fecaca"/><stop offset="60%" stop-color="#ef4444"/><stop offset="100%" stop-color="#991b1b"/></linearGradient>
+          </defs>
+          <rect width="600" height="150" rx="18" fill="rgba(2,6,23,.45)"/>
+          <path d="M0 78 H600" stroke="rgba(255,255,255,.12)"/>
+          <path d="M0 78 C38 78 50 78 64 78 C73 77 79 56 90 78 C105 80 112 80 124 78 C145 78 145 78 156 78 C161 84 166 100 173 20 C181 118 191 74 198 78 C220 78 237 78 258 78 C285 78 299 48 327 78 C354 103 365 78 393 78 C420 78 435 78 450 78 C456 84 462 100 470 22 C479 120 489 74 498 78 C530 78 560 78 600 78" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="floating-card stats-mini">
+        <div class="mini-title">Detected output</div>
+        <div class="metric-row">
+          <div class="metric"><span>Rate</span><strong>75</strong></div>
+          <div class="metric"><span>Mode</span><strong>NSR</strong></div>
+        </div>
+      </div>
+      <div class="floating-card heart-mini">
+        <div class="mini-title">Conduction view</div>
+        <svg class="mini-heart heart-svg" viewBox="0 0 620 640" aria-label="Static image of the cardiac conduction system">
+          <g id="miniHeartMount"></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section id="capabilities" class="info-section">
+    <div class="section-head">
+      <p class="eyebrow">What it can do</p>
+      <h2 class="section-title">One website for ECG rhythm learning.</h2>
+      <p class="section-copy">The site combines an ECG strip, a synchronized heart conduction model, and a rhythm selector so you can connect the waveform to what is happening inside the heart.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="feature-icon">📤</div><h3>Analyze uploaded ECGs</h3><p>Upload a clean rhythm-strip image. The browser estimates rate, regularity, QRS width, and maps the strip to the closest supported rhythm.</p></div>
+      <div class="feature-card"><div class="feature-icon">📚</div><h3>Study rhythm patterns</h3><p>Switch between sinus rhythm, AF, flutter, SA blocks, AV blocks, bundle branch blocks, and LVH to compare ECG morphology.</p></div>
+      <div class="feature-card"><div class="feature-icon">🫀</div><h3>Link ECG to conduction</h3><p>Watch the SA node, internodal pathways, AV node, Bundle of His, bundle branches, and Purkinje system activate with the strip.</p></div>
+      <div class="feature-card"><div class="feature-icon">🧠</div><h3>Quiz yourself</h3><p>Generate ECG cases with symptoms, duration, measurements, leads, and either MCQ or typed-answer mode.</p></div>
+    </div>
+  </section>
+
+  <section id="study" class="info-section">
+    <div class="section-head">
+      <p class="eyebrow">Study rhythms</p>
+      <h2 class="section-title">Choose a rhythm and watch the mechanism.</h2>
+      <p class="section-copy">Use the visualizer to compare how rhythm disorders alter atrial activation, AV conduction, ventricular depolarization, and the ECG waveform.</p>
+    </div>
+    <div class="rhythm-showcase">
+      <div class="rhythm-list">
+        <div class="rhythm-chip"><strong>Atrial fibrillation</strong><span>Chaotic atrial activity, absent organized P waves, irregular ventricular response.</span></div>
+        <div class="rhythm-chip"><strong>Atrial flutter</strong><span>Macro-reentry atrial activity with sawtooth flutter waves.</span></div>
+        <div class="rhythm-chip"><strong>AV blocks</strong><span>PR prolongation, dropped QRS complexes, or complete AV dissociation.</span></div>
+        <div class="rhythm-chip"><strong>Bundle branch blocks</strong><span>Delayed ventricular activation with widened QRS morphology.</span></div>
+      </div>
+      <div class="card study-preview">
+        <svg viewBox="0 0 700 380">
+          <rect width="700" height="380" rx="28" fill="rgba(2,6,23,.32)"/>
+          <path class="theme-gridline" d="M40 245 H660" stroke="var(--gridStrong)" opacity=".55"/>
+          <path class="theme-stroke" d="M40 245 C70 245 85 245 105 245 C117 240 125 222 140 245 C162 250 177 248 193 245 C220 245 238 245 254 245 C262 254 268 292 278 150 C288 318 304 241 318 245 C355 245 388 245 420 245 C462 245 485 190 530 245 C570 295 595 245 660 245" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>
+          <text x="56" y="60" fill="#dbeafe" font-size="28" font-weight="800">Rhythm library</text>
+          <text x="56" y="94" fill="#94a3b8" font-size="17">Use the dropdown in the workspace to change the ECG and heart animation.</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="quiz" class="quiz-section">
+    <div class="section-head">
+      <p class="eyebrow">Quiz lab</p>
+      <h2 class="section-title">Generate live ECG cases and test yourself.</h2>
+      <p class="section-copy">Choose the lead view, show one lead or all 12, add posterior leads, and generate patient cases with ECG measurements. Answer as MCQs or type your interpretation.</p>
+    </div>
+
+    <div class="quiz-shell">
+      <div class="quiz-card">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Live rhythm display</p>
+            <h2 id="quizRhythmTitle">Quiz ECG monitor</h2>
+          </div>
+          <div class="phase-pill" id="quizLeadMode">Lead II</div>
+        </div>
+
+        <div class="quiz-toolbar">
+          <label>Lead display
+            <select id="quizLeadDisplay">
+              <option value="single">Show one lead</option>
+              <option value="all12">Show all 12 leads</option>
+            </select>
+          </label>
+          <label>Lead
+            <select id="quizLeadSelect">
+              <option value="I">I</option>
+              <option value="II" selected>II</option>
+              <option value="III">III</option>
+              <option value="aVR">aVR</option>
+              <option value="aVL">aVL</option>
+              <option value="aVF">aVF</option>
+              <option value="V1">V1</option>
+              <option value="V2">V2</option>
+              <option value="V3">V3</option>
+              <option value="V4">V4</option>
+              <option value="V5">V5</option>
+              <option value="V6">V6</option>
+              <option value="V7">V7 posterior</option>
+              <option value="V8">V8 posterior</option>
+              <option value="V9">V9 posterior</option>
+            </select>
+          </label>
+          <label class="check-label"><input id="posteriorLeads" type="checkbox" /> Add posterior leads V7–V9</label>
+          <label>Answer mode
+            <select id="answerMode">
+              <option value="mcq">MCQs</option>
+              <option value="typed">Typing answer</option>
+            </select>
+          </label>
+          <label>Speed
+            <select id="quizSpeedSelect">
+              <option value="10">10 mm/s</option>
+              <option value="25" selected>25 mm/s</option>
+              <option value="50">50 mm/s</option>
+              <option value="100">100 mm/s</option>
+              <option value="200">200 mm/s</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="quiz-ecg-wrap">
+          <canvas id="quizEcgCanvas" width="1100" height="620"></canvas>
+        </div>
+        <div class="lead-badge-row" id="quizLeadBadges"></div>
+        <div class="paper-speed-note" id="quizSpeedNote">Paper speed: 25 mm/s</div>
+        <p class="quiz-mini-note">This quiz ECG is simulated for learning. Lead morphology is simplified and should not be treated as a diagnostic tracing.</p>
+      </div>
+
+      <div class="quiz-card">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">AI-style case generator</p>
+            <h2 id="caseDiagnosisTitle">Generate a case</h2>
+          </div>
+          <button id="generateCaseBtn" class="accent-button">Generate case</button>
+        </div>
+
+        <div class="case-story" id="caseStory">Click “Generate case” to create a patient profile, symptoms, duration, ECG measurements, and a question.</div>
+
+        <div class="quiz-case-grid">
+          <div class="case-stat"><strong>Patient</strong><span id="casePatient">—</span></div>
+          <div class="case-stat"><strong>Symptoms</strong><span id="caseSymptoms">—</span></div>
+          <div class="case-stat"><strong>Duration</strong><span id="caseDuration">—</span></div>
+          <div class="case-stat"><strong>Vitals</strong><span id="caseVitals">—</span></div>
+        </div>
+
+        <div class="ecg-measurements">
+          <div class="measure"><span>P wave</span><strong id="mP">—</strong></div>
+          <div class="measure"><span>PR</span><strong id="mPR">—</strong></div>
+          <div class="measure"><span>QRS</span><strong id="mQRS">—</strong></div>
+          <div class="measure"><span>QTc</span><strong id="mQT">—</strong></div>
+          <div class="measure"><span>ST</span><strong id="mST">—</strong></div>
+          <div class="measure"><span>Rhythm</span><strong id="mRhythm">—</strong></div>
+          <div class="measure"><span>Rate</span><strong id="mRate">—</strong></div>
+          <div class="measure"><span>Axis/Voltage</span><strong id="mAxis">—</strong></div>
+        </div>
+
+        <div class="answer-area">
+          <h3 id="questionText">Question will appear here.</h3>
+          <div id="mcqAnswers" class="mcq-list"></div>
+          <textarea id="typedAnswer" placeholder="Type your diagnosis / ECG interpretation here..." style="display:none"></textarea>
+          <div class="quiz-actions">
+            <button id="checkAnswerBtn" class="play-button">Check answer</button>
+            <button id="revealAnswerBtn" class="icon-button">Reveal answer</button>
+          </div>
+          <div id="quizFeedback" class="feedback-box">Your feedback will appear here.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="analyze" class="info-section">
+    <div class="workspace-intro">
+      <div>
+        <p class="eyebrow">Analyze ECGs</p>
+        <h2>Upload a rhythm strip and map it to the visualizer.</h2>
+        <p>The current image-analysis model is a browser-based MVP. It works best for clean single-lead rhythm strips and gives approximate educational output.</p>
+      </div>
+      <a class="primary-link" href="#workspace">Go to visualizer ↓</a>
+    </div>
+  </section>
+
+  <section id="workspace" class="info-section">
+    <div class="section-head">
+      <p class="eyebrow">Interactive workspace</p>
+      <h2 class="section-title">Analyze, study, and scrub through the ECG.</h2>
+      <p class="section-copy">Upload an ECG, choose a rhythm manually, adjust BPM, or scrub the ECG cursor to inspect the cardiac cycle frame by frame.</p>
+    </div>
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-target="analyze-mode">Analyze ECGs</button>
+      <button class="mode-tab" data-target="study-mode">Study rhythms</button>
+      <button class="mode-tab" data-target="conduction-mode">Conduction view</button>
+      <button class="mode-tab" data-target="quiz">Quiz lab</button>
+    </div>
+
+  <section class="controls global-settings" id="study-mode">
+    <label class="rhythm-control"><span>Rhythm</span><select id="rhythm"></select></label>
+  </section>
+
+  
+  <section class="card upload-card" id="analyze-mode">
+    <div class="card-header"><div><p class="eyebrow">ECG upload MVP</p><h2>Upload a rhythm strip and estimate the closest rhythm</h2></div><div>⬆︎</div></div>
+    <div class="upload-grid">
+      <div class="upload-panel">
+        <div class="field-row">
+          <label>ECG image
+            <input id="ecgFile" type="file" accept="image/png,image/jpeg,image/webp,image/jpg" />
+          </label>
+          <label>Lead
+            <select id="leadSelect">
+              <option value="lead2">Lead II rhythm strip</option>
+              <option value="rhythm">Single rhythm strip (unknown lead)</option>
+              <option value="twelve">12-lead screenshot</option>
+            </select>
+          </label>
+          <label>Strip duration (s)
+            <input id="stripDuration" type="number" min="2" max="20" step="1" value="10" />
+          </label>
+        </div>
+        <div class="preview-wrap">
+          <img id="ecgPreview" alt="Uploaded ECG preview" />
+          <div id="previewPlaceholder">Upload a clean ECG image for analysis.<br><span class="small-note">Best results: one horizontal rhythm strip, high contrast, minimal tilt.</span></div>
+        </div>
+        <div class="waveform-strip">
+          <canvas id="waveCanvas" width="720" height="110"></canvas>
+        </div>
+        <canvas id="workCanvas" class="hidden-work-canvas"></canvas>
+      </div>
+      <div class="analysis-panel">
+        <div class="analyze-row">
+          <button id="analyzeBtn" class="accent-button">Analyze ECG</button>
+          <div id="analyzeStatus" class="status-pill">Awaiting upload</div>
+        </div>
+        <div class="analysis-output">
+          <div class="stat"><strong>Detected rhythm</strong><span id="detectedRhythm">—</span></div>
+          <div class="stat"><strong>Estimated BPM</strong><span id="detectedBpm">—</span></div>
+          <div class="stat"><strong>Regularity</strong><span id="detectedRegularity">—</span></div>
+          <div class="stat"><strong>Confidence</strong><span id="detectedConfidence">—</span></div>
+        </div>
+        <p class="analysis-note" id="analysisReason">This MVP does a simple client-side analysis of an uploaded ECG image and maps it to the closest rhythm already available in the visualizer. It is educational only and not a diagnostic tool.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="main-grid">
+    <section class="card">
+      <div class="card-header"><div><p class="eyebrow">Live ECG strip</p><h2 id="rhythmTitle">Normal sinus rhythm</h2></div><div class="phase-pill" id="phasePill">P wave</div></div>
+      <div class="ecg-local-controls">
+        <button id="prev" class="icon-button">⏮ Previous</button>
+        <button id="play" class="play-button">Pause</button>
+        <button id="next" class="icon-button">Next ⏭</button>
+        <button id="reset" class="icon-button">↺ Reset</button>
+        <label class="hr-control ecg-hr-control"><span>Heart rate</span><input id="hr" type="range" min="10" max="200" step="1" value="75" /><strong id="hrValue">75 bpm</strong><small id="cycleValue">Cycle length: 0.80 s</small></label>
+        <label class="speed-control"><span>Speed</span><select id="ecgSpeedSelect"><option value="10">10 mm/s</option><option value="25" selected>25 mm/s</option><option value="50">50 mm/s</option><option value="100">100 mm/s</option><option value="200">200 mm/s</option></select></label>
+      </div>
+      <svg viewBox="0 0 920 220" class="ecg-svg" aria-label="Animated ECG trace">
+        <defs>
+          <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--gridStrong)" opacity=".55" stroke-width="1"/></pattern>
+          <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#smallGrid)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="var(--gridStrong)" opacity=".85" stroke-width="1.5"/></pattern>
+          <linearGradient id="ecgGradient" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--accentLight)"/><stop offset="55%" stop-color="var(--accent)"/><stop offset="100%" stop-color="var(--accent2)"/></linearGradient>
+          <clipPath id="traceClip"><rect id="traceClipRect" x="0" y="0" width="1" height="220" rx="18"/></clipPath>
+        </defs>
+        <g>
+        <rect width="920" height="220" fill="url(#grid)" rx="18"/>
+        <path d="M0 112 H920" stroke="rgba(255,255,255,0.16)" stroke-width="1"/>
+        <path id="ecgShadow" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="8" stroke-linecap="round"/>
+        <g clip-path="url(#traceClip)"><path id="ecgPath" fill="none" stroke="url(#ecgGradient)" stroke-width="4" stroke-linecap="round"/></g>
+        <line id="cursorLine" x1="20" y1="20" x2="20" y2="200" stroke="white" stroke-width="2" stroke-dasharray="8 8"/>
+        <circle id="cursorDot" class="cursor-dot" cx="20" cy="112" r="7" fill="white"/>
+        <g id="ecgMarkers"></g>
+        <g id="hitboxes"></g>
+      </svg>
+      <div class="paper-speed-note" id="ecgSpeedNote">Paper speed: 25 mm/s</div>
+
+      <div class="cursor-controls">
+        <div class="scrub-row">
+          <button id="backSmall" class="scrub-button">− small</button>
+          <button id="backPhase" class="scrub-button">− phase</button>
+          <input id="scrub" class="scrub-slider" type="range" min="0" max="1000" step="1" value="20" />
+          <button id="forwardPhase" class="scrub-button">+ phase</button>
+          <button id="forwardSmall" class="scrub-button">+ small</button>
+        </div>
+        <div class="scrub-meta"><span>Manual cursor control</span><strong id="scrubPct">2%</strong></div>
+      </div>
+
+      <div class="timeline" id="timeline"></div>
+      <div class="warning-note" id="rhythmNote"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-header"><div><p class="eyebrow">Synchronized heart view</p><h2>Conduction + chamber response</h2></div><div>♥</div></div>
+      <svg id="heartVisual" viewBox="0 0 620 640" class="heart-svg" aria-label="Anatomical heart cross-section with chambers, vessels, and conduction system">
+        <defs>
+          <radialGradient id="blueBloodWash" cx="50%" cy="50%" r="70%"><stop offset="0%" stop-color="rgba(59,130,246,0.88)"/><stop offset="100%" stop-color="rgba(14,165,233,0.08)"/></radialGradient>
+          <radialGradient id="redBloodWash" cx="50%" cy="50%" r="70%"><stop offset="0%" stop-color="rgba(239,68,68,0.88)"/><stop offset="100%" stop-color="rgba(244,114,182,0.08)"/></radialGradient>
+          <radialGradient id="repolGradient" cx="50%" cy="50%" r="65%"><stop offset="0%" stop-color="rgba(192,132,252,0.55)"/><stop offset="100%" stop-color="rgba(192,132,252,0)"/></radialGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="4" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <clipPath id="raClip"><path d="M160 154 C143 174 137 211 143 247 C148 275 169 291 203 294 C238 297 265 283 280 257 C291 230 291 197 281 174 C270 150 243 139 211 140 C188 140 171 145 160 154 Z" /></clipPath>
+          <clipPath id="laClip"><path d="M389 160 C411 145 439 142 463 150 C488 159 505 181 509 207 C513 234 506 259 489 276 C472 291 448 296 423 291 C400 288 382 277 371 260 C360 241 356 219 360 198 C364 180 375 168 389 160 Z" /></clipPath>
+          <clipPath id="rvClip"><path d="M145 328 C176 309 221 309 258 324 C286 337 300 362 301 394 C300 436 281 483 248 510 C209 504 173 488 148 459 C125 433 116 402 122 375 C127 351 134 337 145 328 Z" /></clipPath>
+          <clipPath id="lvClip"><path d="M342 326 C372 310 410 310 441 324 C472 338 492 366 498 401 C504 441 495 486 475 527 C456 564 428 588 391 598 C360 600 340 581 331 550 C321 514 319 472 321 432 C322 389 328 348 342 326 Z" /></clipPath>
+        </defs>
+
+        <!-- Continuous myocardial shell: the LV forms the apex; the thinner RV wraps across its anterior surface. -->
+        <path class="myocardium" d="M166 151 C139 177 126 216 132 263 C136 290 125 314 111 344 C92 385 99 438 128 478 C164 526 214 548 276 554 C298 587 333 611 377 615 C426 620 472 587 493 541 C516 491 529 428 518 376 C509 334 494 310 487 291 C516 257 524 206 507 170 C489 132 450 124 411 139 C379 151 355 174 339 203 C317 173 288 153 258 143 C220 131 188 135 166 151 Z"/>
+        <path class="epicardium" d="M166 151 C139 177 126 216 132 263 C136 290 125 314 111 344 C92 385 99 438 128 478 C164 526 214 548 276 554 C298 587 333 611 377 615 C426 620 472 587 493 541 C516 491 529 428 518 376 C509 334 494 310 487 291 C516 257 524 206 507 170 C489 132 450 124 411 139 C379 151 355 174 339 203 C317 173 288 153 258 143 C220 131 188 135 166 151 Z"/>
+
+        <g id="raGroup" class="chamber-group">
+          <path d="M160 154 C143 174 137 211 143 247 C148 275 169 291 203 294 C238 297 265 283 280 257 C291 230 291 197 281 174 C270 150 243 139 211 140 C188 140 171 145 160 154 Z" fill="rgba(77,162,237,.22)"/>
+          <path class="chamber-outline ra" d="M160 154 C143 174 137 211 143 247 C148 275 169 291 203 294 C238 297 265 283 280 257 C291 230 291 197 281 174 C270 150 243 139 211 140 C188 140 171 145 160 154 Z" />
+          <g clip-path="url(#raClip)"><circle id="raWash" class="wash blue-wash" cx="218" cy="238" r="70" /><circle id="raSqueeze" class="wash squeeze-indicator" cx="218" cy="205" r="18" /></g>
+        </g>
+        <g id="laGroup" class="chamber-group">
+          <path d="M389 160 C411 145 439 142 463 150 C488 159 505 181 509 207 C513 234 506 259 489 276 C472 291 448 296 423 291 C400 288 382 277 371 260 C360 241 356 219 360 198 C364 180 375 168 389 160 Z" fill="rgba(255,92,126,.18)"/>
+          <path class="chamber-outline la" d="M389 160 C411 145 439 142 463 150 C488 159 505 181 509 207 C513 234 506 259 489 276 C472 291 448 296 423 291 C400 288 382 277 371 260 C360 241 356 219 360 198 C364 180 375 168 389 160 Z" />
+          <g clip-path="url(#laClip)"><circle id="laWash" class="wash red-wash" cx="433" cy="234" r="64" /><circle id="laSqueeze" class="wash red-squeeze" cx="434" cy="204" r="18" /></g>
+        </g>
+        <g id="rvGroup" class="chamber-group">
+          <path d="M145 328 C176 309 221 309 258 324 C286 337 300 362 301 394 C300 436 281 483 248 510 C209 504 173 488 148 459 C125 433 116 402 122 375 C127 351 134 337 145 328 Z" fill="rgba(77,162,237,.16)"/>
+          <path class="chamber-outline rv" d="M145 328 C176 309 221 309 258 324 C286 337 300 362 301 394 C300 436 281 483 248 510 C209 504 173 488 148 459 C125 433 116 402 122 375 C127 351 134 337 145 328 Z" />
+          <g clip-path="url(#rvClip)"><circle id="rvWash" class="wash blue-wash" cx="252" cy="468" r="112" /><circle id="rvSqueeze" class="wash squeeze-indicator" cx="248" cy="384" r="30" /></g>
+        </g>
+        <g id="lvGroup" class="chamber-group">
+          <path d="M342 326 C372 310 410 310 441 324 C472 338 492 366 498 401 C504 441 495 486 475 527 C456 564 428 588 391 598 C360 600 340 581 331 550 C321 514 319 472 321 432 C322 389 328 348 342 326 Z" fill="rgba(255,92,126,.18)"/>
+          <path class="chamber-outline lv" d="M342 326 C372 310 410 310 441 324 C472 338 492 366 498 401 C504 441 495 486 475 527 C456 564 428 588 391 598 C360 600 340 581 331 550 C321 514 319 472 321 432 C322 389 328 348 342 326 Z" />
+          <path id="lvhWall" class="lvh-wall" d="M354 340 C380 328 410 329 434 340 C458 351 472 374 477 403 C483 440 475 479 458 515 C441 550 417 572 389 581" />
+          <g clip-path="url(#lvClip)"><circle id="lvWash" class="wash red-wash" cx="382" cy="462" r="108" /><circle id="lvSqueeze" class="wash red-squeeze" cx="379" cy="386" r="30" /></g>
+        </g>
+
+        <!-- Branching endocardial conduction network, shaped after the physiological atrial and His–Purkinje routes. -->
+        <path class="conduction-base" d="M190 170 C218 158 245 171 259 201 C272 229 279 270 300 302" />
+        <path id="condAnterior" class="flow-path" d="M190 170 C218 158 245 171 259 201 C272 229 279 270 300 302" stroke-width="7" pathLength="100" />
+        <path class="conduction-base" d="M190 170 C205 193 223 220 245 247 C264 270 283 288 300 302" />
+        <path id="condMiddle" class="flow-path" d="M190 170 C205 193 223 220 245 247 C264 270 283 288 300 302" stroke-width="6" pathLength="100" />
+        <path class="conduction-base" d="M190 170 C176 198 170 229 184 256 C202 281 261 291 300 302" />
+        <path id="condPosterior" class="flow-path" d="M190 170 C176 198 170 229 184 256 C202 281 261 291 300 302" stroke-width="6" pathLength="100" />
+        <path class="conduction-base" d="M190 170 C230 151 276 164 311 190 C346 215 382 218 420 195 C440 183 458 191 464 209 C470 229 458 248 437 260 C402 278 354 271 300 302" />
+        <path id="condBachmann" class="flow-path" d="M190 170 C230 151 276 164 311 190 C346 215 382 218 420 195 C440 183 458 191 464 209 C470 229 458 248 437 260 C402 278 354 271 300 302" stroke-width="6" pathLength="100" />
+        <path class="conduction-base" d="M300 302 C304 318 310 334 317 350" />
+        <path id="condHis" class="flow-path" d="M300 302 C304 318 310 334 317 350" stroke-width="6" pathLength="100" />
+        <path class="conduction-base" d="M317 350 C304 377 291 405 278 433 C266 461 250 482 231 495" />
+        <path id="condRBB" class="flow-path" d="M317 350 C304 377 291 405 278 433 C266 461 250 482 231 495" stroke-width="6" pathLength="100" />
+        <path class="conduction-base" d="M317 350 C330 379 342 411 354 444 C365 473 383 493 405 505" />
+        <path id="condLBB" class="flow-path" d="M317 350 C330 379 342 411 354 444 C365 473 383 493 405 505" stroke-width="6" pathLength="100" />
+
+        <path class="conduction-base" d="M278 433 C251 426 225 411 203 389 C187 372 175 353 166 336" />
+        <path id="condPurkinjeR" class="flow-path" d="M278 433 C251 426 225 411 203 389 C187 372 175 353 166 336" stroke-width="4.5" pathLength="100" />
+        <path class="conduction-base" d="M260 466 C231 461 202 448 178 430 C158 415 143 396 132 375" />
+        <path id="condPurkinjeR2" class="flow-path" d="M260 466 C231 461 202 448 178 430 C158 415 143 396 132 375" stroke-width="4" pathLength="100" />
+        <path class="conduction-base" d="M239 491 C211 488 185 478 163 463 C146 452 134 438 126 421" />
+        <path id="condPurkinjeR3" class="flow-path" d="M239 491 C211 488 185 478 163 463 C146 452 134 438 126 421" stroke-width="4" pathLength="100" />
+        <path class="conduction-base" d="M278 433 C269 465 270 500 282 532 C286 542 291 550 298 557" />
+        <path id="condPurkinjeR4" class="flow-path" d="M278 433 C269 465 270 500 282 532 C286 542 291 550 298 557" stroke-width="4" pathLength="100" />
+
+        <path class="conduction-base" d="M354 444 C379 431 402 412 420 389 C433 371 442 350 446 332" />
+        <path id="condPurkinjeL" class="flow-path" d="M354 444 C379 431 402 412 420 389 C433 371 442 350 446 332" stroke-width="4.5" pathLength="100" />
+        <path class="conduction-base" d="M374 480 C404 470 431 452 451 429 C467 410 478 390 485 368" />
+        <path id="condPurkinjeL2" class="flow-path" d="M374 480 C404 470 431 452 451 429 C467 410 478 390 485 368" stroke-width="4" pathLength="100" />
+        <path class="conduction-base" d="M402 503 C429 494 451 480 469 462 C483 446 492 428 496 406" />
+        <path id="condPurkinjeL3" class="flow-path" d="M402 503 C429 494 451 480 469 462 C483 446 492 428 496 406" stroke-width="4" pathLength="100" />
+        <path class="conduction-base" d="M354 444 C355 480 364 520 380 550 C386 563 392 574 398 583" />
+        <path id="condPurkinjeL4" class="flow-path" d="M354 444 C355 480 364 520 380 550 C386 563 392 574 398 583" stroke-width="4" pathLength="100" />
+
+        <!-- Each animated ventricular route is a single unbroken path from AV node to its distal fibre. -->
+        <path id="condTreeR1" class="flow-path" d="M300 302 C304 318 310 334 317 350 C304 377 291 405 278 433 C251 426 225 411 203 389 C187 372 175 353 166 336" stroke-width="4.5" pathLength="100" />
+        <path id="condTreeR2" class="flow-path" d="M300 302 C304 318 310 334 317 350 C304 377 291 405 278 433 C271 449 266 459 260 466 C231 461 202 448 178 430 C158 415 143 396 132 375" stroke-width="4" pathLength="100" />
+        <path id="condTreeR3" class="flow-path" d="M300 302 C304 318 310 334 317 350 C304 377 291 405 278 433 C266 461 250 482 239 491 C211 488 185 478 163 463 C146 452 134 438 126 421" stroke-width="4" pathLength="100" />
+        <path id="condTreeR4" class="flow-path" d="M300 302 C304 318 310 334 317 350 C304 377 291 405 278 433 C269 465 270 500 282 532 C286 542 291 550 298 557" stroke-width="4" pathLength="100" />
+        <path id="condTreeL1" class="flow-path" d="M300 302 C304 318 310 334 317 350 C330 379 342 411 354 444 C379 431 402 412 420 389 C433 371 442 350 446 332" stroke-width="4.5" pathLength="100" />
+        <path id="condTreeL2" class="flow-path" d="M300 302 C304 318 310 334 317 350 C330 379 342 411 354 444 C361 461 367 473 374 480 C404 470 431 452 451 429 C467 410 478 390 485 368" stroke-width="4" pathLength="100" />
+        <path id="condTreeL3" class="flow-path" d="M300 302 C304 318 310 334 317 350 C330 379 342 411 354 444 C365 473 383 493 402 503 C429 494 451 480 469 462 C483 446 492 428 496 406" stroke-width="4" pathLength="100" />
+        <path id="condTreeL4" class="flow-path" d="M300 302 C304 318 310 334 317 350 C330 379 342 411 354 444 C355 480 364 520 380 550 C386 563 392 574 398 583" stroke-width="4" pathLength="100" />
+        <path id="rbbBlocked" class="blocked-path" d="M317 350 C304 377 291 405 278 433 C266 461 250 482 231 495" />
+        <path id="lbbBlocked" class="blocked-path" d="M317 350 C330 379 342 411 354 444 C365 473 383 493 405 505" />
+        <path id="avBlocked" class="blocked-path" d="M291 289 C295 294 298 298 300 302" />
+        <path id="flutterLoop" class="flutter-loop" d="M176 198 C184 167 220 158 244 178 C266 198 258 237 232 260 C205 281 164 254 176 198 Z" />
+
+        <circle id="saNode" class="node" cx="190" cy="170" r="11" />
+        <circle id="avNode" class="node" cx="300" cy="302" r="11" />
+        <circle id="repolRing" class="repol-ring" cx="311" cy="414" r="66" style="opacity:0" />
+        <circle id="repolFill" cx="311" cy="414" r="42" fill="url(#repolGradient)" style="opacity:0" />
+
+        <text x="96" y="80" class="diagram-label side">R</text>
+        <text x="520" y="80" class="diagram-label side">L</text>
+        <text x="178" y="220" text-anchor="middle" class="diagram-label chamber">RA</text>
+        <text x="437" y="216" text-anchor="middle" class="diagram-label chamber">LA</text>
+        <text x="222" y="398" text-anchor="middle" class="diagram-label chamber">RV</text>
+        <text x="386" y="414" text-anchor="middle" class="diagram-label chamber">LV</text>
+
+        <text x="201" y="157" class="diagram-label small">SA node</text>
+        <text x="326" y="184" class="diagram-label small">Bachmann bundle → atria → AV node</text>
+        <text x="238" y="242" class="diagram-label small">Internodal pathways</text>
+        <text x="314" y="302" class="diagram-label small">AV node</text>
+        <text x="326" y="346" class="diagram-label small">Bundle of His</text>
+        <text x="164" y="438" class="diagram-label small">Right bundle branch</text>
+        <text x="448" y="438" text-anchor="end" class="diagram-label small">Left bundle branch</text>
+        <text id="rbbBlockLabel" x="160" y="456" class="diagram-label blocked" style="opacity:0">RBBB delay</text>
+        <text id="lbbBlockLabel" x="444" y="456" text-anchor="end" class="diagram-label blocked" style="opacity:0">LBBB delay</text>
+        <text id="avBlockLabel" x="316" y="294" class="diagram-label blocked" style="opacity:0">AV conduction blocked</text>
+        <text x="196" y="492" class="diagram-label small">Purkinje fibres</text>
+        <text x="428" y="492" text-anchor="end" class="diagram-label small">Purkinje fibres</text>
+        <text id="heartCaption" x="310" y="625" text-anchor="middle" class="heart-caption">Atrial depolarization</text>
+        </g>
+      </svg>
+    </section>
+  </div>
+
+  <section class="card explanation"><div class="card-header"><div><p class="eyebrow">Active explanation</p><h2 id="exTitle">P wave</h2></div><div>☇</div></div><div class="explanation-grid"><div><h3>Electrical event</h3><p id="electrical"></p></div><div><h3>Mechanical event</h3><p id="mechanical"></p></div><div><h3>Clinical link</h3><p id="pathology"></p></div></div></section>
+  <footer class="footer">Educational ECG visualizer only — not a diagnostic medical device.</footer>
+  </section>
+</main>
+
+  <script src="app.js"></script>
+</body>
+</html>
